@@ -1,11 +1,11 @@
 {
-    "name": "tavii/oauth2-yconnect",
+    "name": "brlab-inc/oauth2-yconnect",
     "description": "Yahoo Japan Yconnect library",
     "license": "MIT",
     "authors": [
         {
-            "name": "polidog",
-            "email": "polidogs@gmail.com"
+            "name": "YAMATO Takeshi",
+            "email": "tyamato@brlab.works"
         }
     ],
     "keywords": [
@@ -24,12 +24,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Tavii\\OAuth2\\Client\\Provider\\": "src/"
+            "BRlab\\OAuth2\\Client\\Provider\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tavii\\OAuth2\\Client\\Provider\\Test\\": "test/src/"
+            "BRlab\\OAuth2\\Client\\Provider\\Test\\": "test/src/"
         }
     },
     "require-dev": {
