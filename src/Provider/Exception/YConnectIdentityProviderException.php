@@ -5,7 +5,7 @@
  * Date: 2016/11/09
  */
 
-namespace Tavii\OAuth2\Client\Provider\Exception;
+namespace BRlab\OAuth2\Client\Provider\Exception;
 
 
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;

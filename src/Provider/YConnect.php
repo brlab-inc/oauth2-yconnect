@@ -5,13 +5,13 @@
  * Date: 2016/11/09
  */
 
-namespace Tavii\OAuth2\Client\Provider;
+namespace BRlab\OAuth2\Client\Provider;
 
 
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Token\AccessToken;
 use Psr\Http\Message\ResponseInterface;
-use Tavii\OAuth2\Client\Provider\Exception\YConnectIdentityProviderException;
+use BRlab\OAuth2\Client\Provider\Exception\YConnectIdentityProviderException;
 
 class YConnect extends AbstractProvider
 {

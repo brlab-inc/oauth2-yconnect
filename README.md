@@ -14,11 +14,11 @@ To install, use composer.
 $ composer require tavii/oauth2-yconnect
 ```
 
-Usage is the same as The League's OAuth client, using \Tavii\OAuth2\Client\Provider\YConnect as the provider.
+Usage is the same as The League's OAuth client, using \BRlab\OAuth2\Client\Provider\YConnect as the provider.
 
 
 ```
-$provider = new Tavii\OAuth2\Client\Provider\YConnect([
+$provider = new BRlab\OAuth2\Client\Provider\YConnect([
     'clientId'          => '{yconnect-client-id}',
     'clientSecret'      => '{yconnect-client-secret}',
     'redirectUri'       => 'https://example.com/callback-url',

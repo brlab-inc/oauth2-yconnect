@@ -5,12 +5,12 @@
  * Date: 2016/12/06
  */
 
-namespace Tavii\OAuth2\Client\Provider\Test;
+namespace BRlab\OAuth2\Client\Test\Provider;
 
+use PHPUnit\Framework\TestCase;
+use BRlab\OAuth2\Client\Provider\YConnectResourceOwner;
 
-use Tavii\OAuth2\Client\Provider\YConnectResourceOwner;
-
-class YConnectResourceOwnerTest extends \PHPUnit_Framework_TestCase
+class YConnectResourceOwnerTest extends TestCase
 {
     /**
      * @test

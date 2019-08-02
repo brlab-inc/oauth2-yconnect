@@ -5,28 +5,28 @@
  * Date: 2016/11/11
  */
 
-namespace Tavii\OAuth2\Client\Provider\Test;
+namespace BRlab\OAuth2\Client\Test\Provider;
 
-
+use PHPUnit\Framework\TestCase;
 use GuzzleHttp\ClientInterface;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Tavii\OAuth2\Client\Provider\YConnect;
+use BRlab\OAuth2\Client\Provider\YConnect;
 
-class YConnectTest extends \PHPUnit_Framework_TestCase
+class YConnectTest extends TestCase
 {
     /**
      * @var YConnect
      */
     private $provider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->provider = new YConnect([
             'clientId' => 'mock_client_id',
             'clientSecret' => 'mock_secret',
-            'redirectUri' => 'none'
+            'redirectUri' => 'none',
         ]);
     }
 
@@ -65,13 +65,11 @@ class YConnectTest extends \PHPUnit_Framework_TestCase
         $response = $this->prophesize(ResponseInterface::class);
         $response->getBody()
             ->willReturn('{"access_token":"mock_access_token","token_type":"bearer", "expires_in":"3600","refresh_token":"mock_refresh_token","id_token": "mock_id_token"}')
-            ->shouldBeCalled()
-            ;
+            ->shouldBeCalled();
 
         $response->getHeader(Argument::type('string'))
             ->willReturn(['content-type' => 'application/json'])
-            ->shouldBeCalled()
-            ;
+            ->shouldBeCalled();
 
         $response->getStatusCode()
             ->willReturn(200);

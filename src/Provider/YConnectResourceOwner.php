@@ -5,7 +5,7 @@
  * Date: 2016/11/09
  */
 
-namespace Tavii\OAuth2\Client\Provider;
+namespace BRlab\OAuth2\Client\Provider;
 
 
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
