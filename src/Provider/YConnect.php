@@ -7,7 +7,6 @@
 
 namespace BRlab\OAuth2\Client\Provider;
 
-
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Token\AccessToken;
 use Psr\Http\Message\ResponseInterface;
@@ -17,36 +16,77 @@ class YConnect extends AbstractProvider
 {
     const API_DOMAIN = 'https://auth.login.yahoo.co.jp';
 
-    const USERINFO_DOMAIN = 'https://userinfo.yahooapis.jp';
+    protected $_openidConfiguration;
 
-    public $version = 'v1';
+    public $version = 'v2';
 
     /**
-     * {@inheritdoc}
+     * YConnect constructor.
+     *
+     * @param array $options
+     * @param array $collaborators
+     */
+    public function __construct(array $options = [], array $collaborators = [])
+    {
+        parent::__construct($options, $collaborators);
+
+        if (isset($options['version'])) {
+            $this->version = $options['version'];
+        }
+    }
+
+    /**
+     * @return array
+     * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
+     */
+    public function discovery()
+    {
+        if (!$this->_openidConfiguration) {
+            $method = self::METHOD_GET;
+            $url = $this->getApiBaseUrl() . '/.well-known/openid-configuration';
+            $options = [];
+            $request = $this->getRequest($method, $url, $options);
+            $this->_openidConfiguration = $this->getParsedResponse($request);
+        }
+        return $this->_openidConfiguration;
+    }
+
+    /**
+     * @return string
+     * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
      */
     public function getBaseAuthorizationUrl()
     {
-        return $this->getApiBaseUrl().'/authorization';
+        $config = $this->discovery();
+        return $config['authorization_endpoint'];
     }
 
+    /**
+     * @param mixed|null $token
+     * @return array
+     */
     protected function getAuthorizationHeaders($token = null)
     {
         if ($token != null) {
-            return ['Authorization' => 'Bearer '.$token];
+            return ['Authorization' => 'Bearer ' . $token];
         }
         return [];
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $params
+     * @return string
+     * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
      */
     public function getBaseAccessTokenUrl(array $params)
     {
-        return $this->getApiBaseUrl().'/token';
+        $config = $this->discovery();
+        return $config['token_endpoint'];
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $params
+     * @return mixed
      */
     protected function getAccessTokenOptions(array $params)
     {
@@ -56,32 +96,53 @@ class YConnect extends AbstractProvider
             'redirect_uri' => $params['redirect_uri'],
         ]);
 
-        $options['headers']['Authorization'] = 'Basic '.base64_encode($params['client_id']. ':' . $params['client_secret']);
+        $options['headers']['Authorization'] = 'Basic ' . base64_encode($params['client_id'] . ':' . $params['client_secret']);
         return $options;
     }
 
     /**
-     * {@inheritdoc}
+     * @param AccessToken $token
+     * @return string
+     * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
      */
     public function getResourceOwnerDetailsUrl(AccessToken $token)
     {
-        return $this->getUserInfoBaseUrl().'/attribute?schema=openid';
+        $config = $this->discovery();
+        return $config['userinfo_endpoint'] . '';
     }
 
+    /**
+     * @param AccessToken $token
+     * @return \BRlab\OAuth2\Client\Provider\YConnectResourceOwner
+     */
+    public function getResourceOwner(AccessToken $token)
+    {
+        return parent::getResourceOwner($token);
+    }
 
+    /**
+     * @param string $method
+     * @param string $url
+     * @param \League\OAuth2\Client\Token\AccessTokenInterface|string $token
+     * @param array $options
+     * @return \Psr\Http\Message\RequestInterface
+     */
     public function getAuthenticatedRequest($method, $url, $token, array $options = [])
     {
         return $this->createRequest($method, $url, $token, $options);
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
     protected function getDefaultScopes()
     {
-        return [
-            'openid',
-        ];
+        $config = $this->discovery();
+        return array(implode(' ', $config['scopes_supported']));
+//        return [
+//            'openid profile',
+////            'profile',
+//        ];
     }
 
     /**
@@ -97,20 +158,21 @@ class YConnect extends AbstractProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $response
+     * @param AccessToken $token
+     * @return YConnectResourceOwner
      */
     protected function createResourceOwner(array $response, AccessToken $token)
     {
         return new YConnectResourceOwner($response);
     }
 
+    /**
+     * @return string
+     */
     protected function getApiBaseUrl()
     {
-        return static::API_DOMAIN. "/yconnect/".$this->version;
+        return static::API_DOMAIN . "/yconnect/" . $this->version;
     }
 
-    protected function getUserInfoBaseUrl()
-    {
-        return static::USERINFO_DOMAIN. '/yconnect/'.$this->version;
-    }
 }

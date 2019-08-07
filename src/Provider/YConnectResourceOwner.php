@@ -41,7 +41,7 @@ class YConnectResourceOwner implements ResourceOwnerInterface
 
     public function getId()
     {
-        return $this->getResource('user_id');
+        return $this->getResource('sub');
     }
 
     public function getName()
