@@ -11,7 +11,7 @@ This package provides YConnect(Yahoo Japan) OAuth2.0 support for the PHP League'
 To install, use composer.
 
 ```
-$ composer require tavii/oauth2-yconnect
+$ composer require brlab-inc/oauth2-yconnect
 ```
 
 Usage is the same as The League's OAuth client, using \BRlab\OAuth2\Client\Provider\YConnect as the provider.
